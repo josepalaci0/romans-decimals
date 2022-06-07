@@ -1,28 +1,37 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import {decimalToRoman, romanToDecimal} from '../features/convertSlice';
+import { decimalToRoman, romanToDecimal } from '../features/convertSlice';
 
 function FormConverter() {
   const [optionA, setOptionA] = useState('romanos');
   const [optionB, setOptionB] = useState('decimal');
-  const [payload, setPayload] = useState('');
-  const result = useSelector(state => state.convert.value);
+  const [payload, setPayload] = useState(0);
+  const result = useSelector(state => state.convert.value);//123456789 1234
   const dispatch = useDispatch();
 
+  const inputSet = (payload) => {
+   const input = parseInt(payload)   
+   if (isNaN(input)) {
+     const romano = true
+     
+   }
+  }
+
   const changeOption = (e) => {
-    const option = e.target.value;
-    const targetId = e.target.id;
-    if(targetId === 'a' && option === 'decimal' && optionB === 'decimal'){
+    const option = e.target.value; //decimal (decimal,romano)
+    const targetId = e.target.id;// Tipe (a,b)
+
+    if (targetId === 'a' && option === 'decimal' && optionB === 'decimal') {
       setOptionA('decimal');
       setOptionB('romanos');
-    }else if(targetId === 'a' && option === 'romanos' && optionB === 'romanos'){
+    } else if (targetId === 'a' && option === 'romanos' && optionB === 'romanos') {
       setOptionA('romanos');
       setOptionB('decimal');
-    }else if(targetId === 'b' && option === 'decimal' && optionA === 'decimal'){
+    } else if (targetId === 'b' && option === 'decimal' && optionA === 'decimal') {
       setOptionA('romanos');
       setOptionB('decimal');
-    }else{
+    } else {
       setOptionA('decimal');
       setOptionB('romanos');
     }
@@ -30,13 +39,18 @@ function FormConverter() {
 
   const convert = (e) => {
     e.preventDefault();
-    
-    if(optionB === 'romanos'){
+    inputSet(payload)
+
+    if (optionB === 'romanos') {
       dispatch(decimalToRoman(payload));
-    }else{
+    } else {
       dispatch(romanToDecimal(payload));
     }
   }
+
+ 
+ 
+  
 
 
   return (
@@ -65,14 +79,14 @@ function FormConverter() {
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>{optionA.toUpperCase()}</Form.Label>
-          <Form.Control type="text" onChange={e => setPayload(e.target.value)}/>
+          <Form.Control type="text" onChange={e => setPayload(e.target.value)} />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>{optionB.toUpperCase()}</Form.Label>
           <Form.Control type="text" value={result} disabled />
         </Form.Group>
-      
+
         <Button variant="primary" type="submit">
           Convertir
         </Button>
