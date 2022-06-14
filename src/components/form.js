@@ -1,22 +1,15 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { decimalToRoman, romanToDecimal } from '../features/convertSlice';
+import { Converting } from './converting'
 
 function FormConverter() {
   const [optionA, setOptionA] = useState('romanos');
   const [optionB, setOptionB] = useState('decimal');
-  const [payload, setPayload] = useState(0);
-  const result = useSelector(state => state.convert.value);//123456789 1234
+  const [payload, setPayload] = useState("");
+  const [results, setResults] = useState(""); 
   const dispatch = useDispatch();
-
-  const inputSet = (payload) => {
-   const input = parseInt(payload)   
-   if (isNaN(input)) {
-     const romano = true
-     
-   }
-  }
 
   const changeOption = (e) => {
     const option = e.target.value; //decimal (decimal,romano)
@@ -39,20 +32,13 @@ function FormConverter() {
 
   const convert = (e) => {
     e.preventDefault();
-    inputSet(payload)
-
+    setResults(Converting(payload))
     if (optionB === 'romanos') {
       dispatch(decimalToRoman(payload));
     } else {
       dispatch(romanToDecimal(payload));
     }
   }
-
- 
- 
-  
-
-
   return (
     <Col>
       <Form onSubmit={e => convert(e)}>
@@ -84,7 +70,7 @@ function FormConverter() {
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>{optionB.toUpperCase()}</Form.Label>
-          <Form.Control type="text" value={result} disabled />
+          <Form.Control type="text" value={results} disabled />
         </Form.Group>
 
         <Button variant="primary" type="submit">
